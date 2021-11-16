@@ -45,6 +45,12 @@ void Queue::push(const std::vector<int> newValues)
         }
     }
 
+
+int Queue::peek()
+    {
+    return array[0]; N_op++;
+    }
+
 int Queue::pop()
     {
     if (is_not_empty())
@@ -62,10 +68,6 @@ int Queue::pop()
         }
     }
 
-int Queue::peek()
-    {
-    return array[0]; N_op++;
-    }
 
 int Queue::is_not_empty()
     {
@@ -166,19 +168,24 @@ int Queue::get(size_t pos)
 int& Queue:: operator[] (unsigned int index)
     {
     is_not_empty();
-    check_pos_exist(index);
-    N_op++;
-    int& adress_el = array[0]; N_op+=2;
-    N_op+=2;
-    for (size_t i = 0; i < index; i++)
+    check_pos_exist(index); 
+    Queue copyQueue(this);
+    int& adress_el = copyQueue.array[0];
+    for (size_t i = 0; i < size; i++)
         {
-        N_op+=3;
-        adress_el = array[i]; N_op+=2;
-        push(get(i));
+        if ( i == index)
+            {
+            adress_el = copyQueue.array[i];
+            push(pop());
+            }
+        else
+            {
+            push(pop());
+            }
         }
     return adress_el;
     }
-
+    
 void Queue:: sort()
     {
     int temp, item; N_op+=2;
@@ -205,5 +212,4 @@ void Queue::print()
         std::cout << array[i] << "  "; 
         }
     }
-
 
