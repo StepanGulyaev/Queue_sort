@@ -6,13 +6,16 @@
 class Queue
     {
     private:
-        size_t size;
-        std::vector<int> array;
+        std::vector<int> array; 
 
         int is_not_empty(); // check if queue is empty
         int check_pos_exist(unsigned int pos); // check position on existence 
 
+
     public:
+        size_t size;
+        unsigned long long int N_op;
+        
         Queue(); //Constructor
         Queue(Queue* myQueue_adress); // copy original queue
         ~Queue(); //Destructor
@@ -20,17 +23,19 @@ class Queue
         void push(const int el); // add element
         void push(const std::vector<int> newValues); // add few elements
         int pop(); // delete first element and return it's value
-        void clear();
-        void clear(size_t pos);
+        int peek(); // return value of the first element 
+        void clear(); // delete all elements from array
+        void clear(size_t pos); // delete all elements before the certain position ()
+        void clear_N_op(); //clear operation counter 
 
-        void set(const int newValue,size_t pos); // set new value to element on first position
-        int get(size_t pos); // get new value from element on n-position
+        void set(const int newValue,size_t pos); // set new value to element on n-position
+        int get(size_t pos); // get value from element on n-position
 
         int& operator[] (unsigned int index); // overload the "[]"
 
-        void sort(); //sort
+        void sort(); //insertion sort of queue
 
-        void print();
+        void print(); // print the queue
     };
 
 #endif
