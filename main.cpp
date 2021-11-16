@@ -2,41 +2,65 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
-#include <cstdlib>
+#include <chrono>
+
+
+using namespace std::chrono;
 
 
 
 void fill_vector(std::vector<int> &random_numbers)
     {
-    int smallest, biggest;
-    std:: cout << "Set range of values" << std::endl;
-    std:: cout << "Enter the smallest possible value: ";
-    std:: cin >> smallest;
-    std:: cout << "And the biggest one: ";
-    std:: cin >> biggest;
+    int smallest = -10000;
+    int biggest = 10000;
     for (size_t i = 0; i < random_numbers.size(); i++)
         {
-        int random_number = smallest + rand() % biggest;
+        int random_number = smallest + rand() % (biggest - smallest);
         random_numbers[i] = random_number;
         }
     }
 
+/*void sort_Queue(Queue* &myQueue_adress)
+    {
+    int temp, item; myQueue_adress->N_op+=2;
+    for (int i = 1; i < myQueue_adress->size; i++)
+        {
+        temp = myQueue_adress->get(i); myQueue_adress->N_op+=2;
+        item = i-1; myQueue_adress->N_op+=2;
+        while(item >= 0 && myQueue_adress->get(item) > temp)
+            {
+            myQueue_adress->set(myQueue_adress->get(item),item + 1);myQueue_adress->N_op+=3; 
+            myQueue_adress->set(temp,item); myQueue_adress->N_op++;
+            item--; myQueue_adress->N_op++;
+            }
+        }    
+    }*/
+
 int main()
     { 
     Queue myQueue;
-
-    size_t size;
-
-    std:: cout << "How many numbers you want to sort?" << std::endl;
-    std:: cin >> size;
+    size_t size = 0;
     std::vector<int> random_numbers(size);
-    fill_vector(random_numbers);
+    while (size < 3000)
+        {
+        size+=300;
+        random_numbers.resize(size);
 
-    myQueue.push(random_numbers);
-    myQueue.print();
+        std::cout<< "Number of sorted elements: " << size << " ";
+        fill_vector(random_numbers);
+        myQueue.push(random_numbers);
+        random_numbers.clear();
 
-    std:: cout << std::endl;
-    Queue copyQueue(&myQueue);
-    copyQueue.sort();
-    copyQueue.print();
+        myQueue.clear_N_op();
+        time_point<system_clock> start, end;
+        start = system_clock::now();
+        myQueue.sort();
+        end = system_clock::now();
+        duration<double> seconds = end - start;
+
+        std:: cout << "Sort time:" << seconds.count() << " ";
+        std:: cout << "Number of operations:" << myQueue.N_op << std::endl;
+        myQueue.clear_N_op();
+        myQueue.clear();
+        }
     }
