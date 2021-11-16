@@ -5,38 +5,43 @@
 
 Queue::Queue()
     {
-    size = 0;
-    std::vector<int> array;
+    size = 0;  N_op++;
+    std::vector<int> array;  N_op++;
     }
 
 Queue::Queue(Queue* myQueue_adress)
     {
-    size = myQueue_adress->size;
+    size = myQueue_adress->size; N_op+=2;
     if (size)
         {
+        N_op++;
+        N_op+=2;
         for (size_t i = 0; i < size; i++)
             {
-            array.push_back(myQueue_adress->array[i]);
+            N_op+=3;
+            array.push_back(myQueue_adress->array[i]); N_op+=4;
             }
         }
     }
 
 Queue::~Queue()
     {
-    array.clear();
+    array.clear(); N_op+=size;
     }
 
 void Queue::push(const int el)
     {
-    array.push_back(el);
-    size++;
+    array.push_back(el);N_op+=2;
+    size++; N_op+=2;
     }
 
 void Queue::push(const std::vector<int> newValues)
     {
+    N_op+=2;
     for(size_t i = 0; i < newValues.size(); i++)
         {
-        push(newValues[i]);
+        N_op+=3;
+        push(newValues[i]); N_op++;
         }
     }
 
@@ -44,26 +49,29 @@ int Queue::pop()
     {
     if (is_not_empty())
         {
-        int first_el = array[0];
-        for (size_t i = 0; i < size - 1; i++)
-            {
-            array[i] = array[i+1];
-            }
-        size--;
-        array.resize(size);
-        return first_el;
+        N_op++;
+        int first_el = peek(); N_op+=2;
+        array.erase(array.begin()); N_op+=2;
+        size--; N_op+=2;
+        return first_el; 
         }
     else
         {
+        N_op++;
         return 0;
         }
     }
 
+int Queue::peek()
+    {
+    return array[0]; N_op++;
+    }
 
 int Queue::is_not_empty()
     {
     if(!size)
         {
+        N_op++;
         throw std::runtime_error("Queue is empty!");
         return 0;
         }
@@ -74,6 +82,7 @@ int Queue::check_pos_exist(unsigned int pos)
     {
     if (pos > size)
         {
+        N_op++;
         throw std::runtime_error("Value of pos[" + std::to_string(pos) + "] bigger than queue size[" + std::to_string(size) + "]!");
         return 0;
         }
@@ -84,8 +93,9 @@ void Queue::clear()
     {
     if (is_not_empty())
         {
+        N_op++;
         array.clear();
-        size = 0;
+        size = 0; N_op++;
         }
     }
 
@@ -93,23 +103,34 @@ void Queue::clear(size_t pos)
     {
     if ( (is_not_empty() ) && (check_pos_exist(pos)) )
         {
+        N_op++;
+        N_op+=2;
         for (size_t i = 0 ; i < pos; i++)
             {
-            array.erase(array.begin()+i);
-            size--;
+            N_op+=3;
+            pop(); 
             }
         }
+    }
+
+void Queue:: clear_N_op ()
+    {
+    N_op = 0;
     }
 
 void Queue::set(const int newValue,size_t pos)
     {
     if ( (is_not_empty() ) && (check_pos_exist(pos) ))
         {
+        N_op++;
+        N_op+=2;
         for (size_t i = 0; i < size; i++)
             {
+            N_op+=3;
             if ( i == pos )
                 {
-                pop();
+                N_op++;
+                pop(); 
                 push(newValue);
                 }
             else
@@ -124,50 +145,55 @@ int Queue::get(size_t pos)
     {
     if ( (is_not_empty() ) && (check_pos_exist(pos) ))
         {
-        int result = 0;
-        for (size_t i = 0; i < size; i++)
+        N_op++;
+        Queue copyQueue(this); N_op++;
+        int result = 0; N_op+=2;
+        N_op+=2;
+        for (size_t i = 0; i <= pos; i++)
             {
-            if ( i == pos )
-                {
-                result = pop();
-                push(result);
-                }
-            else
-                {
-                push(pop());
-                }
+            N_op+=3;
+            result = copyQueue.pop(); N_op++;
             }
         return result;
         }
+    else 
+        {
+        N_op++;
+        return 0;
+        }
     }
-
 
 int& Queue:: operator[] (unsigned int index)
     {
-    if ( (is_not_empty() ) && (check_pos_exist(index) ))
+    is_not_empty();
+    check_pos_exist(index);
+    N_op++;
+    int& adress_el = array[0]; N_op+=2;
+    N_op+=2;
+    for (size_t i = 0; i < index; i++)
         {
-        int& adress_el = array[0];
-        for (size_t i = 0; i < index; i++)
-            {
-            adress_el = (array[i]);
-            push(get(i));
-            }
-        return adress_el;
+        N_op+=3;
+        adress_el = array[i]; N_op+=2;
+        push(get(i));
         }
+    return adress_el;
     }
 
 void Queue:: sort()
     {
-    int temp, item; 
+    int temp, item; N_op+=2;
+    N_op+=2;
     for (int i = 1; i < size; i++)
         {
-        temp = get(i); 
-        item = i-1; 
+        N_op+=3;
+        temp = get(i); N_op++; 
+        item = i-1; N_op+=2 ; 
         while(item >= 0 && get(item) > temp)
             {
+            N_op+=3;
             set(get(item),item + 1); 
             set(temp,item);
-            item--;
+            item--; N_op+=2;
             }
         }
     }
@@ -176,7 +202,8 @@ void Queue::print()
     {
     for (size_t i = 0; i <size; i++)
         {
-        std::cout << array[i] << "  ";
+        std::cout << array[i] << "  "; 
         }
     }
+
 
