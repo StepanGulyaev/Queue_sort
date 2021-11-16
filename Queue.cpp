@@ -170,20 +170,20 @@ int& Queue:: operator[] (unsigned int index)
     is_not_empty();
     check_pos_exist(index); 
     Queue copyQueue(this);
-    int& adress_el = copyQueue.array[0];
-    for (size_t i = 0; i < size; i++)
+    size_t i = 0;
+    while (i < size)
         {
-        if ( i == index)
+        if (i == index)
             {
-            adress_el = copyQueue.array[i];
-            push(pop());
+            int& adress_el = copyQueue.array[0];
+            return adress_el;
             }
         else
             {
-            push(pop());
+            copyQueue.push(copyQueue.pop());
             }
+        i++;
         }
-    return adress_el;
     }
     
 void Queue:: sort()
@@ -212,4 +212,5 @@ void Queue::print()
         std::cout << array[i] << "  "; 
         }
     }
+
 
