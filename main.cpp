@@ -20,11 +20,13 @@ void fill_vector(std::vector<int> &random_numbers)
         }
     }
 
+
 int main()
     { 
     Queue myQueue;
     size_t size = 0;
     std::vector<int> random_numbers(size);
+
     while (size < 3000)
         {
         size+=300;
@@ -44,6 +46,7 @@ int main()
 
         std:: cout << "Sort time:" << seconds.count() << " ";
         std:: cout << "Number of operations:" << myQueue.N_op << std::endl;
+
         myQueue.clear_N_op();
         myQueue.clear();
         }
