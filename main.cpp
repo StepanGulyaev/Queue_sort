@@ -20,22 +20,6 @@ void fill_vector(std::vector<int> &random_numbers)
         }
     }
 
-/*void sort_Queue(Queue* &myQueue_adress)
-    {
-    int temp, item; myQueue_adress->N_op+=2;
-    for (int i = 1; i < myQueue_adress->size; i++)
-        {
-        temp = myQueue_adress->get(i); myQueue_adress->N_op+=2;
-        item = i-1; myQueue_adress->N_op+=2;
-        while(item >= 0 && myQueue_adress->get(item) > temp)
-            {
-            myQueue_adress->set(myQueue_adress->get(item),item + 1);myQueue_adress->N_op+=3; 
-            myQueue_adress->set(temp,item); myQueue_adress->N_op++;
-            item--; myQueue_adress->N_op++;
-            }
-        }    
-    }*/
-
 int main()
     { 
     Queue myQueue;
